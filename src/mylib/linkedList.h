@@ -93,7 +93,7 @@ size_t getLinkedListSize(LinkedList *list);
  * @param list A pointer to the list.
  * @param func A pointer to the function to be applied to each element.
  */
-void iterateLinkedList(LinkedList *list, void (*func)(void *));
+void iterateLinkedList(LinkedList *list, void (*func)(void **));
 
 #endif // LINKED_LIST_H
 

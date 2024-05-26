@@ -1,4 +1,5 @@
 #include "linkedList.h"
+#include "doublylinkedlist.h"
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -98,12 +99,12 @@ int insertLinkedList(LinkedList *list, void *data, size_t pos) {
     return -1;
   }
 
-  if (pos < 0 || pos >= list->_private_size) {
+  if (pos < 0 || pos > list->_private_size) {
     fprintf(stderr, "Index out of bounds\n");
     return -1;
   }
 
-  if (pos == list->_private_size - 1) {
+  if (pos == list->_private_size) {
     return appendLinkedList(list, data);
   }
 
@@ -181,10 +182,11 @@ void *getLinkedList(LinkedList *list, size_t pos) {
 
 size_t getLinkedListSize(LinkedList *list) { return list->_private_size; }
 
-void iterateLinkedList(LinkedList *list, void (*func)(void *)) {
+void iterateLinkedList(LinkedList *list, void (*func)(void **)) {
   LinkedListNode *current = list->_private_head;
-  for (int i = 0; i < getLinkedListSize(list); i++) {
-    func(current->_private_data);
+  size_t size = getLinkedListSize(list);
+  for (int i = 0; i < size; i++) {
+    func(&current->_private_data);
     current = current->_private_next;
   }
 }
