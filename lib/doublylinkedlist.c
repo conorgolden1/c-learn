@@ -1,3 +1,15 @@
+/*
+Author: Conor Golden
+Email: conorgolden1@hotmail.com
+File: doublylinkedlist.c
+Description:
+    Implementation of a doubly linked list in C, including functions for
+creating, freeing, appending, prepending, inserting, and removing elements, as
+well as utility functions for traversing, accessing, and iterating over the
+list.
+Created On: 05/29/2024
+*/
+
 #include "doublylinkedlist.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -46,6 +58,8 @@ void freeDoublyLinkedList(DoublyLinkedList *list) {
   }
 
   free(list);
+
+  list = NULL;
 }
 
 int appendDoublyLinkedList(DoublyLinkedList *list, void *data) {
@@ -105,7 +119,7 @@ DoublyLinkedListNode *traverseBackward(DoublyLinkedListNode *node, int *index) {
   return node->prev;
 }
 
-void *getDoublyLinkedListNode(DoublyLinkedList *list, size_t pos) {
+DoublyLinkedListNode *getDoublyLinkedListNode(DoublyLinkedList *list, size_t pos) {
   if (!list) {
     return NULL;
   }
@@ -164,7 +178,7 @@ int insertDoublyLinkedList(DoublyLinkedList *list, void *data, size_t pos) {
   }
 
   DoublyLinkedListNode *node = createDoublyLinkedListNode(data);
-  DoublyLinkedListNode *current = getDoublyLinkedListNode(list, pos);
+  DoublyLinkedListNode *current = getDoublyLinkedListNode(list, pos - 1);
 
   node->next = current->next;
   current->next = node;
@@ -177,21 +191,23 @@ int insertDoublyLinkedList(DoublyLinkedList *list, void *data, size_t pos) {
 
 void *removeDoublyLinkedList(DoublyLinkedList *list, size_t pos) {
   DoublyLinkedListNode *node = getDoublyLinkedListNode(list, pos);
+  DoublyLinkedListNode *prev = node->prev;
+  DoublyLinkedListNode *next = node->next;
 
   if (!node) {
     return NULL;
   }
 
-  if (node->prev) {
-    node->prev->next = node->next;
+  if (prev) {
+    prev->next = next;
   } else {
-    list->head = node->next;
+    list->head = next;
   }
 
-  if (node->next) {
-    node->next->prev = node->prev;
+  if (next) {
+    next->prev = prev;
   } else {
-    list->tail = node->prev;
+    list->tail = prev;
   }
 
   void *data = node->data;
@@ -202,11 +218,7 @@ void *removeDoublyLinkedList(DoublyLinkedList *list, size_t pos) {
 }
 
 void *getDoublyLinkedListElement(DoublyLinkedList *list, size_t pos) {
-  DoublyLinkedListNode *node = getDoublyLinkedListNode(list, pos);
-  if (!node) {
-    return NULL;
-  }
-  return node->data;
+  return getDoublyLinkedListNode(list, pos)->data;
 }
 
 void iterateDoublyLinkedList(DoublyLinkedList *list, void (*func)(void *)) {

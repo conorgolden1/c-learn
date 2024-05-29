@@ -1,3 +1,13 @@
+/*
+Author: Conor Golden
+Email: conorgolden1@hotmail.com
+File: linkedList.c
+Description:
+    Implementation of a singly linked list in C, including functions for
+creating, freeing, appending, prepending, inserting, and removing elements.
+Created On: 05/29/2024
+*/
+
 #include "linkedList.h"
 #include "doublylinkedlist.h"
 #include <stddef.h>
@@ -94,6 +104,23 @@ int prependLinkedList(LinkedList *list, void *data) {
   return 0;
 }
 
+LinkedListNode *getLinkedListNode(LinkedList *list, size_t pos) {
+  if (!list) {
+    return NULL;
+  }
+
+  if (pos < 0 || pos >= list->_private_size) {
+    fprintf(stderr, "Index out of bounds\n");
+    return NULL;
+  }
+
+  LinkedListNode *current = list->_private_head;
+  for (int i = 0; i < pos; i++) {
+    current = current->_private_next;
+  }
+  return current;
+}
+
 int insertLinkedList(LinkedList *list, void *data, size_t pos) {
   if (!list) {
     return -1;
@@ -113,7 +140,7 @@ int insertLinkedList(LinkedList *list, void *data, size_t pos) {
   }
 
   LinkedListNode *current = list->_private_head;
-  for (int i = 0; i <= pos; i++) {
+  for (int i = 0; i < pos - 1; i++) {
     current = current->_private_next;
   }
   int result = insertNewNode(current, data);
@@ -125,59 +152,29 @@ int insertLinkedList(LinkedList *list, void *data, size_t pos) {
 }
 
 void *removeLinkedList(LinkedList *list, size_t pos) {
-  if (!list) {
-    return NULL;
-  }
-
-  if (pos < 0 || pos >= list->_private_size) {
-    fprintf(stderr, "Index out of bounds\n");
-    return NULL;
-  }
-
-  LinkedListNode *current = list->_private_head;
+  LinkedListNode *prev = NULL;
+  LinkedListNode *node;
 
   if (pos == 0) {
-    list->_private_head = current->_private_next;
-    current->_private_next = NULL;
-    if (list->_private_size == 1) {
-      list->_private_tail = NULL;
-    }
-    list->_private_size--;
-    void *data = current->_private_data;
-    free(current);
-    return data;
+    node = list->_private_head;
+    list->_private_head = list->_private_head->_private_next;
+  } else {
+    prev = getLinkedListNode(list, pos - 1);
+    node = prev->_private_next;
+    prev->_private_next = node->_private_next;
   }
 
-  for (int i = 1; i < pos; i++) {
-    current = current->_private_next;
+  if (pos == --list->_private_size) {
+    list->_private_tail = prev;
   }
 
-  LinkedListNode *node = current->_private_next;
-  current->_private_next = node->_private_next;
-
-  if (pos == list->_private_size - 1) {
-    list->_private_tail = current;
-  }
-  list->_private_size--;
-  void *data = current->_private_data;
+  void *data = node->_private_data;
   free(node);
   return data;
 }
 
-void *getLinkedList(LinkedList *list, size_t pos) {
-  if (!list) {
-    return NULL;
-  }
-
-  if (pos < 0 || pos >= list->_private_size) {
-    fprintf(stderr, "Index out of bounds\n");
-    return NULL;
-  }
-  LinkedListNode *current = list->_private_head;
-  for (int i = 0; i < pos; i++) {
-    current = current->_private_next;
-  }
-  return current->_private_data;
+void *getLinkedListElement(LinkedList *list, size_t pos) {
+  return getLinkedListNode(list, pos)->_private_data;
 }
 
 size_t getLinkedListSize(LinkedList *list) { return list->_private_size; }

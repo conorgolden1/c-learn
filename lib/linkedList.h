@@ -1,4 +1,12 @@
-
+/*
+Author: Conor Golden
+Email: conorgolden1@hotmail.com
+File: linkedList.h
+Description:
+    Header file defining structures and function prototypes for a singly linked
+list in C.
+Created On: 05/29/2024
+*/
 #ifndef LINKED_LIST_H
 #define LINKED_LIST_H
 
@@ -22,9 +30,10 @@ typedef struct {
 /**
  * @brief Creates a new empty linked list.
  *
- * @return A pointer to the newly created list, or NULL if memory allocation fails.
+ * @return A pointer to the newly created list, or NULL if memory allocation
+ * fails.
  */
-LinkedList* createLinkedList();
+LinkedList *createLinkedList();
 
 /**
  * @brief Frees all memory associated with the linked list.
@@ -57,27 +66,32 @@ int prependLinkedList(LinkedList *list, void *data);
  * @param list A pointer to the list.
  * @param data A pointer to the data to be added.
  * @param pos The position at which to insert the new element (0-based index).
- * @return 0 if successful, -1 if memory allocation fails or if the position is invalid.
+ * @return 0 if successful, -1 if memory allocation fails or if the position is
+ * invalid.
  */
 int insertLinkedList(LinkedList *list, void *data, size_t pos);
 
 /**
- * @brief Removes and returns the element at the specified position in the linked list.
+ * @brief Removes and returns the element at the specified position in the
+ * linked list.
  *
  * @param list A pointer to the list.
  * @param pos The position of the element to be removed (0-based index).
- * @return A pointer to the data of the removed element, or NULL if the position is invalid.
+ * @return A pointer to the data of the removed element, or NULL if the position
+ * is invalid.
  */
-void* removeLinkedList(LinkedList *list, size_t pos);
+void *removeLinkedList(LinkedList *list, size_t pos);
 
 /**
- * @brief Returns the element at the specified position in the linked list without removing it.
+ * @brief Returns the element at the specified position in the linked list
+ * without removing it.
  *
  * @param list A pointer to the list.
  * @param pos The position of the element to retrieve (0-based index).
- * @return A pointer to the data of the element, or NULL if the position is invalid.
+ * @return A pointer to the data of the element, or NULL if the position is
+ * invalid.
  */
-void* getLinkedList(LinkedList *list, size_t pos);
+void *getLinkedListElement(LinkedList *list, size_t pos);
 
 /**
  * @brief Returns the size of the linked list.
@@ -96,4 +110,3 @@ size_t getLinkedListSize(LinkedList *list);
 void iterateLinkedList(LinkedList *list, void (*func)(void **));
 
 #endif // LINKED_LIST_H
-
